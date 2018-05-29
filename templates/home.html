@@ -1,5 +1,24 @@
 {% extends 'layout.html' %}
 
 {% block body %}
-  YOIS
+  <div class="jumbotron text-center">
+    <h1>Hello, welcome to the Hospitality App!</h1>
+    <p class = "lead">Find your best fit hospital based on local reviews, average medicare coverage, and distance</p>
+    <p class="text-muted">This app was created with Flask framework and BootstrapCDN</p>
+  </div>
+
+  <!-- <div class="col-sm-8">
+    <label for="usr">Enter your local address:</label>
+    <input class = "form-control" type="text" class="form-control" id="usr">
+  </div> -->
+  <label for="usr">Enter your local address:</label>
+  <div class="input-group">
+    <div class="col-sm-6">
+      <input type="text" class="form-control" placeholder="" name="search">
+    </div>
+      <div class="input-group-btn">
+        <button class="btn btn-primary" type="submit">Search</button>
+      </div>
+    </div>
+
 {% endblock %}
