@@ -1,24 +1,35 @@
-{% extends 'layout.html' %}
-
-{% block body %}
-  <div class="jumbotron text-center">
-    <h1>Hello, welcome to the Hospitality App!</h1>
-    <p class = "lead">Find your best fit hospital based on local reviews, average medicare coverage, and distance</p>
-    <p class="text-muted">This app was created with Flask framework and BootstrapCDN</p>
-  </div>
-
-  <!-- <div class="col-sm-8">
-    <label for="usr">Enter your local address:</label>
-    <input class = "form-control" type="text" class="form-control" id="usr">
-  </div> -->
-  <label for="usr">Enter your local address:</label>
-  <div class="input-group">
-    <div class="col-sm-6">
-      <input type="text" class="form-control" placeholder="" name="search">
-    </div>
-      <div class="input-group-btn">
-        <button class="btn btn-primary" type="submit">Search</button>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Hospitality App</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}"> -->
+  </head>
+  <body>
+      <div class="container">
+        <div class="jumbotron text-center">
+          <h1>Hello, welcome to the Hospitality App!</h1>
+          <p class = "lead">Find your best fit hospital based on local reviews, average medicare coverage, and distance</p>
+          <p class = "text-info">Made with Flask and Bootstrap CDN<p>
+        </div>
+        <label for="usr">Enter your local address:</label>
+          <form>
+            <div class="input-group">
+                <input id = "search_bar" type="text" class="form-control" placeholder="Start typing...">
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="submit">Search
+                </button>
+              </div>
+            </div>
+          </form>
+        <script>
+          function search() {
+            var input = document.getElementById("search_bar");
+            var autocomplete = new google.maps.places.Autocomplete(input);
+          }
+        </script>
+        <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1WBmCVoRsgtwPB61umBRu9iB-S_LzC7M&libraries=places&callback=search"></script>
       </div>
-    </div>
-
-{% endblock %}
+  </body>
+</html>
