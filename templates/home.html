@@ -5,6 +5,7 @@
     <title>Hospitality App</title>
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}"> -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
   </head>
   <body>
       <div class="container">
@@ -18,7 +19,7 @@
             <div class="input-group">
                 <input id = "search_bar" type="text" class="form-control" placeholder="Start typing...">
               <div class="input-group-btn">
-                <button class="btn btn-default" type="submit">Search
+                <button id = "search" class="btn btn-default" type="submit" onclick="store()">Search
                 </button>
               </div>
             </div>
@@ -29,6 +30,20 @@
             var autocomplete = new google.maps.places.Autocomplete(input);
           }
         </script>
+        <script>
+          function store() {
+            var input = document.getElementById("search_bar");
+            alert(input);
+          }
+        </script>
+        <!-- <script>
+        $(document).ready(function() {
+            $("#search").click(function() {
+                var search = $("#search_bar").attr('value');
+                alert(search);
+            });
+        });
+        </script> -->
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1WBmCVoRsgtwPB61umBRu9iB-S_LzC7M&libraries=places&callback=search"></script>
       </div>
   </body>
