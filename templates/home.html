@@ -15,9 +15,9 @@
           <p class = "text-info">Made with Flask and Bootstrap CDN<p>
         </div>
         <label for="usr">Enter your local address:</label>
-          <form>
+          <form method = "POST" action="/send">
             <div class="input-group">
-                <input id = "search_bar" type="text" class="form-control" placeholder="Start typing...">
+                <input name = "address" id = "search_bar" type="text" class="form-control" placeholder="Start typing...">
               <div class="input-group-btn">
                 <button id = "search" class="btn btn-default" type="submit" onclick="store()">Search
                 </button>
