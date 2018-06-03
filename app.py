@@ -3,23 +3,25 @@ from sqlalchemy import create_engine
 from flask_mysqldb import MySQL
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
+from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+#
+# engine = create_engine('sqlite:///webmgmt.db', convert_unicode=True, echo=False)
+app = Flask(__name__)
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@Database123@localhost/hospitalityapp'
+db = SQLAlchemy(app)
 
-
-engine = create_engine('sqlite:///webmgmt.db', convert_unicode=True, echo=False)
 
 app.debug = True
+db.init_app(app)
 
 @app.route('/')
 def home():
-    db = SQLAlchemy(app)
-    db.init_app(app)
-    db.create_all()
-    return render_template('home.html')
-
-class Hospitals(db.Model):
-    __table__ = db.Model.metadata.tables['patientdata']
-    def __repr__(self):
-        return self.drg
+    from models import Hospitals
+    a = Hospitals.query.filter_by(zipcode = '94538').first()
+    return a.name;
+    # return Hospitals;
+    # return render_template('home.html')
 
 # at the bottom to run the app
 if __name__ == '__main__':
