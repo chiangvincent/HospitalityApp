@@ -20,7 +20,8 @@ CREATE TABLE patientdata (
   LINES TERMINATED BY '\n'
   IGNORE 1 ROWS;
 
-ALTER TABLE patientdata
-MODIFY COLUMN avg_pay varchar(15),
-MODIFY COLUMN avg_covered varchar(15)
-MODIFY COLUMN avg_medicare varchar(15);
+ALTER TABLE patientdatafiltered
+MODIFY COLUMN avg_covered decimal(8, 2); 
+
+
+ alter table patientdatafiltered drop drg, drop provider_id, drop city, drop zipcode, drop ref, drop num_discharge, drop avg_pay, drop avg_medicare

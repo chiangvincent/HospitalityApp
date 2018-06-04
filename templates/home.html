@@ -6,6 +6,44 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
     <!-- <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='css/styles.css') }}"> -->
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <style type = "text/css">
+    .dropdown-content {
+        /* display: none; */
+        position: absolute;
+        background-color: #f6f6f6;
+        min-width: 230px;
+        border: 1px solid #ddd;
+        z-index: 1;
+    }
+
+    .dropdown-content ul {
+      list-style: none;
+    }
+
+    .dropdown-content a {
+        padding: 10px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+    .show {display:block;}
+
+    #input {
+      display: inline-flex;
+    }
+
+    #myInput {
+      width: 500px;
+    }
+
+    #search_bar {
+      width: 500px;
+    }
+    </style>
   </head>
   <body>
       <div class="container">
@@ -14,15 +52,29 @@
           <p class = "lead">Find your best fit hospital based on local reviews, average medicare coverage, and distance</p>
           <p class = "text-info">Made with Flask and Bootstrap CDN<p>
         </div>
-        <label for="usr">Enter your local address:</label>
+        <label for="usr">Enter your local address and medical procedure below:</label>
           <form method = "POST" action="/send">
+          <div id = "input">
+            <div class="dropdown">
+              <input class = "form-control" type="text" placeholder="Find your procedure..." id="myInput" onkeyup="filterFunction()">
+              <div id="myDropdown" class="dropdown-content">
+                <a href="#about">Extracranial Procedure</a>
+                <a href="#blog">Intracranial Hemorrhage or Cerebral Infarction</a>
+                <a href="#contact">Degenerative Nervous System Disorder</a>
+                <a href="#custom">Transient Ischemia</a>
+                <a href="#support">Cranial and Peripheral Nerve Disorder</a>
+                <a href="#tools">Seizures</a>
+              </div>
+            </div>
+
             <div class="input-group">
-                <input name = "address" id = "search_bar" type="text" class="form-control" placeholder="Start typing...">
+                <input name = "address" id = "search_bar" type="text" class="form-control" placeholder="Enter your address...">
               <div class="input-group-btn">
                 <button id = "search" class="btn btn-default" type="submit" onclick="store()">Search
                 </button>
               </div>
             </div>
+          </div>
           </form>
         <script>
           function search() {
@@ -34,6 +86,23 @@
           function store() {
             var input = document.getElementById("search_bar");
             alert(input);
+          }
+          function show() {
+            document.getElementById("myDropdown").classList.toggle("show");
+          }
+          function filterFunction() {
+            var input, filter, ul, li, a, i;
+            input = document.getElementById("myInput");
+            filter = input.value.toUpperCase();
+            div = document.getElementById("myDropdown");
+            a = div.getElementsByTagName("a");
+            for (i = 0; i < a.length; i++) {
+              if (a[i].innerHTML.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+              } else {
+                a[i].style.display = "none";
+              }
+            }
           }
         </script>
         <!-- <script>

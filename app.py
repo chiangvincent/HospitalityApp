@@ -3,7 +3,7 @@ from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 from flask_mysqldb import MySQL
 from sqlalchemy.ext.declarative import declarative_base
-from gmaps import get_state, get_geocode
+from gmaps import get_state, get_geocode, get_distance
 
 
 # engine = create_engine('sqlite:///webmgmt.db', convert_unicode=True, echo=False)
@@ -11,7 +11,6 @@ from gmaps import get_state, get_geocode
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@Database123@localhost/hospitalityapp'
 db = SQLAlchemy(app)
-
 
 app.debug = True
 db.init_app(app)
@@ -30,11 +29,12 @@ def send():
         return state;
 
 #returns top 3 closest hospitals from database
-def find_closest(address):
+def find_closest(state):
     from models import Hospitals
-
-
-
+    in_state =  Hospitals.query.filter_by(state=state)
+    from models import Filtered_Hospitals
+    a = in_state.group_by("name").all()
+    return a
 
 
 # at the bottom to run the app
