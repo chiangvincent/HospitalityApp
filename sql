@@ -12,16 +12,22 @@ CREATE TABLE patientdata (
   avg_pay int,
   avg_medicare int);
 
-  LOAD DATA LOCAL INFILE
-  'C:/Users/Vincent Chiang/developments/hospitalityapp/data/patient_data.csv'
-  INTO TABLE patientdata
-  FIELDS TERMINATED BY ','
-  ENCLOSED BY '"'
-  LINES TERMINATED BY '\n'
-  IGNORE 1 ROWS;
+LOAD DATA LOCAL INFILE
+'C:/Users/Vincent Chiang/developments/hospitalityapp/data/patient_data.csv'
+INTO TABLE patientdata
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
 
 ALTER TABLE patientdatafiltered
-MODIFY COLUMN avg_covered decimal(8, 2); 
+MODIFY COLUMN avg_covered decimal(8, 2);
+
+ALTER TABLE patientdatafiltered
+ADD COLUMN drg varchar(100) after new;
+
+INSERT INTO patientdatafiltered (drg)
+VALUES drg varchar(100) after new;
 
 
- alter table patientdatafiltered drop drg, drop provider_id, drop city, drop zipcode, drop ref, drop num_discharge, drop avg_pay, drop avg_medicare
+ALTER TABLE patientdatafiltered drop drg, drop provider_id, drop city, drop zipcode, drop ref, drop num_discharge, drop avg_pay, drop avg_medicare;

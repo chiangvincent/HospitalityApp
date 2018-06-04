@@ -15,10 +15,13 @@ db.Model.metadata.reflect(db.engine)
 
 #testing:a = Hospitals.query.filter(Hospitals.zipcode.startswith('94538')).all()
 
+#this is the filtered hospitals class (should never be modified)
 class Hospitals(db.Model):
-    __table__ = db.Model.metadata.tables['patientdata']
+    __table__ = db.Model.metadata.tables['patientdatafiltered']
     def __repr__(self):
         return self.name
 
-class Filtered_Hospitals(Hospitals, Base):
-    __tablename__ = "filteredhospitals"
+# class Filtered_Hospitals(Hospitals, Base):
+#     __table__ = db.Model.metadata.tables['patientdatafiltered']
+#     def __repr__(self):
+#         return self.name
