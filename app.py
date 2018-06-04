@@ -1,12 +1,13 @@
 from flask import Flask, render_template, request
 from sqlalchemy import create_engine
-from flask_mysqldb import MySQL
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
-from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from flask_mysqldb import MySQL
+from sqlalchemy.ext.declarative import declarative_base
+from gmaps import get_state, get_geocode
+
 
 # engine = create_engine('sqlite:///webmgmt.db', convert_unicode=True, echo=False)
+#163065 = num rows of table
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql://root:@Database123@localhost/hospitalityapp'
 db = SQLAlchemy(app)
@@ -24,12 +25,17 @@ def home():
 def send():
     if request.method == 'POST':
         address = request.form['address']
-        return address;
+        geocode = get_geocode(address)
+        state = get_state(geocode)
+        return state;
 
-
-def home():
+#returns top 3 closest hospitals from database
+def find_closest(address):
     from models import Hospitals
-    return render_template('home.html')
+
+
+
+
 
 # at the bottom to run the app
 if __name__ == '__main__':
