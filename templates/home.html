@@ -8,7 +8,7 @@
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <style type = "text/css">
     .dropdown-content {
-        /* display: none; */
+        display: none;
         position: absolute;
         background-color: #f6f6f6;
         min-width: 230px;
@@ -26,15 +26,18 @@
         display: block;
     }
 
+    .dropdown-content a:hover {
+        padding: 10px;
+        text-decoration: none;
+        display: block;
+        background-color: white;
+    }
+
     .dropdown {
         position: relative;
         display: inline-block;
     }
     .show {display:block;}
-
-    #input {
-      display: inline-flex;
-    }
 
     #myInput {
       width: 500px;
@@ -49,45 +52,99 @@
       <div class="container">
         <div class="jumbotron text-center">
           <h1>Hello, welcome to the Hospitality App!</h1>
-          <p class = "lead">Find your best fit hospital based on local reviews, average medicare coverage, and distance</p>
+          <p class = "lead">Find your best fit hospital based on distance and average medicare coverage for specific diagnoses</p>
           <p class = "text-info">Made with Flask and Bootstrap CDN<p>
         </div>
         <label for="usr">Enter your local address and medical procedure below:</label>
-          <form method = "POST" action="/send">
-          <div id = "input">
+          <form autocomplete="off" class="form-inline" method = "POST" action="/send">
+
             <div class="dropdown">
-              <input class = "form-control" type="text" placeholder="Find your procedure..." id="myInput" onkeyup="filterFunction()">
-              <div id="myDropdown" class="dropdown-content">
-                <a href="#about">Extracranial Procedure</a>
-                <a href="#blog">Intracranial Hemorrhage or Cerebral Infarction</a>
-                <a href="#contact">Degenerative Nervous System Disorder</a>
-                <a href="#custom">Transient Ischemia</a>
-                <a href="#support">Cranial and Peripheral Nerve Disorder</a>
-                <a href="#tools">Seizures</a>
-              </div>
+              <input required name="myInput" class = "form-group" type="text" placeholder="Find your procedure..." id="myInput" onfocus="show()"onkeyup="filterFunction()">
+              <div style="overflow-y: scroll; height: 200px" id="myDropdown" class="dropdown-content">
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Extracranial Procedure</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Intracranial Hemorrhage or Cerebral Infarction</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Degenerative Nervous System Disorder</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Transient Ischemia</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Cranial or Peripheral Nerve Disorder</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Seizure</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Dysequilibirum</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Pulmonary Embolism</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Respiratory Infection or Inflammation</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Pulmonary Edema or Respiratory Failure</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Chronic Obstructive Pulmonary Disease</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Pneumonia and Pleurisy</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Bronchitis and Asthma</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Respiratory System Diagnosis with Ventilator Support</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Major Cardiovascular Procedure</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Acute Myocardial Infarction</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Permanent Cardiac Pacemaker Implant</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Circulatory Disorders</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Heart Failure or Shock</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Peripheral Vascular Disorder</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Atherosclerosis</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Hypertension</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Cardiac Arrhythmia or Conduction Disorder</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Chest Pain</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Major Small or Large Bowel Procedure</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Major Gastrointestinal Disorder or Peritoneal Infection</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Gastrointestinal Hemorrhage</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Gastrointestinal Obstruction</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Esophagitis, Gastrointestinal or Misc. Digestive Disorders</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Laparoscopic Cholecystectomy</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Disorders of Pancreas</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Spinal Fusion</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Major Joint Replacement or Reattachment</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Cervical Spinal Fusion</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Fractures of Spine and Pelvis</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Cellulitis</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Misc. Disorders of Nutrition/Metabolism/Electrolytes</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Renal Failure</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Kidney and Urinary Tract Infection</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Red Blood Cell Disorders</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Infectious and Parasitic Diseases</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Septicemia or Severe Sepsis</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Psychoses</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Alcohol/Drug Abuse or Rehabilitation Therapy</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Poisoning and Toxic Effects of Drugs</a>
+                <a href = "javascript:;" onclick="fillProcedureAndClose(this)">Signs and Symptoms Checkup</a>               </div>
             </div>
 
-            <div class="input-group">
-                <input name = "address" id = "search_bar" type="text" class="form-control" placeholder="Enter your address...">
+            <input required class="form-group" name = "address" id = "search_bar" type="text" placeholder="Enter your address...">
               <div class="input-group-btn">
-                <button id = "search" class="btn btn-default" type="submit" onclick="store()">Search
-                </button>
+                <button id = "search" class="btn btn-default" type="submit" onclick="store()">Search</button>
               </div>
-            </div>
-          </div>
+
           </form>
         <script>
           function search() {
             var input = document.getElementById("search_bar");
             var autocomplete = new google.maps.places.Autocomplete(input);
+
+          }
+          //fills in the input field with the procedure and closes the dropdown menu
+          function fillProcedureAndClose(tag) {
+            var text = tag.text;
+            console.log(text);
+            var input = document.getElementById("myInput");
+            document.getElementById("myInput").value = text;
+            document.getElementById("myDropdown").style;
+            console.log(document.getElementById("myDropdown").style.display = "none");
           }
         </script>
         <script>
           function store() {
-            var input = document.getElementById("search_bar");
-            alert(input);
+            var address = document.getElementById("search_bar");
+            var procedure = document.getElementById("myInput");
+            if (address == "" || procedure == "") {
+              alert("Please fill out both fields");
+            }
           }
           function show() {
+            console.log("hi");
+            if (document.getElementById("myDropdown").style.display == "none") {
+              document.getElementById("myDropdown").style.display = "inline";
+              console.log("hi");
+            }
             document.getElementById("myDropdown").classList.toggle("show");
           }
           function filterFunction() {
@@ -105,14 +162,6 @@
             }
           }
         </script>
-        <!-- <script>
-        $(document).ready(function() {
-            $("#search").click(function() {
-                var search = $("#search_bar").attr('value');
-                alert(search);
-            });
-        });
-        </script> -->
         <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD1WBmCVoRsgtwPB61umBRu9iB-S_LzC7M&libraries=places&callback=search"></script>
       </div>
   </body>
