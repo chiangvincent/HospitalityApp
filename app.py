@@ -27,16 +27,9 @@ def send():
         address = request.form['address']
         geocode = get_geocode(address)
         state = get_state(geocode)
+        state_list = find_closest(state, procedure)
+        state_list = state_list.query.add_columns(get_distance(address, state_list.address).label("distance")).all()
         return procedure;
-
-
-# at the bottom to run the app
-if __name__ == '__main__':
-    # from sqlalchemy.orm import scoped_session, sessionmaker, Query
-    # db_session = scoped_session(sessionmaker(bind=engine))
-    # for item in db_session(Hospitals.zipcode, Hospitals.city):
-    #     print (item)
-    app.run()
 
 #HELPER FUUNCTIONS AND DATA STRUCUTRES
 procedures = {
@@ -88,9 +81,26 @@ procedures = {
         "Signs and Symptoms Checkup" : "948 - SIGNS & SYMPTOMS W/O MCC",
 }
 
+
 #returns top 10 closest hospitals from database
-def find_closest(state):
+#state is string of the state of entered address
+#drg is the non-converted code
+#test using drg = "Extracranial Procedure"
+def find_closest(state, drg):
     from models import Hospitals
-    drg = procedures["Extracranial Procedure"]
-    in_state =  Hospitals.query.filter_by(drg = drg).all()
+    drg = procedures[drg]
+    in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).all()
     return in_state
+
+
+#adds distance to a given SQLAlchemy table from a starting location (String)
+def add_distance(hospital_table, location):
+    return null;
+
+# at the bottom to run the app
+if __name__ == '__main__':
+    # from sqlalchemy.orm import scoped_session, sessionmaker, Query
+    # db_session = scoped_session(sessionmaker(bind=engine))
+    # for item in db_session(Hospitals.zipcode, Hospitals.city):
+    #     print (item)
+    app.run()
