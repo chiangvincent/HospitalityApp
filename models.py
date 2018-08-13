@@ -1,7 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from app import db
-from sqlalchemy import  create_engine, inspect, Column, String, Integer, Float, MetaData, Table
+from sqlalchemy import create_engine, inspect, Column, String, Integer, Float, MetaData, Table
+from sqlalchemy.orm import mapper, relationship, sessionmaker, create_session, clear_mappers, session
+from sqlalchemy.dialects.mysql import VARCHAR, DECIMAL
 from sqlalchemy.ext.declarative import declarative_base
 from gmaps import get_distance
 
@@ -27,17 +29,19 @@ class HospitalsDistance(object):
 #takes in the query object (that has been filtered for state and drg), and the address as a string (to use in gmaps API for distance calc)
 def create_distance_table():
     columns = ["id", "name", "address", "avg_covered", "distance"]
-    meta = MetaData(bind=engine)
+    metadata = MetaData(bind=engine)
     dist_table = Table('HospitalsDistance', metadata,
         Column('id', Integer, primary_key=True),
-        Column('name', VARCAR(1000)),
+        Column('name', VARCHAR(1000)),
         Column('address', VARCHAR(1000)),
         Column('avg_covered', DECIMAL(8,2)),
         Column('distance', DECIMAL(10, 2)))
 
     metadata.create_all()
+    clear_mappers()
     mapper(HospitalsDistance, dist_table)
-    session = create_session(bind = e, autocommit=False, autoflush=True)
+    session = create_session(bind = engine, autocommit=False, autoflush=True)
+    return session 
 
 #this is the filtered hospitals class (should never be modified)
 class Hospitals(db.Model):

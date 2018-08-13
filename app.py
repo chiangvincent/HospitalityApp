@@ -3,6 +3,7 @@ from sqlalchemy import create_engine
 from flask_sqlalchemy import SQLAlchemy
 from flask_mysqldb import MySQL
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker, Query
 from gmaps import get_state, get_geocode, get_distance
 
 
@@ -27,8 +28,9 @@ def send():
         address = request.form['address']
         geocode = get_geocode(address)
         state = get_state(geocode)
+        #state_list is a queried object of SQLAlchemy
         state_list = find_closest(state, procedure)
-        state_list_with_dist = state_list.add_columns(get_distance(address, state_list.address).label("distance")).all()
+        add_distance(state_list, address)
         return "Hi"
 
 #HELPER FUUNCTIONS AND DATA STRUCUTRES
@@ -95,19 +97,28 @@ procedures = {
 def find_closest(state, drg):
     from models import Hospitals
     drg = procedures[drg]
-    in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).subquery()
+    in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).all()
     return in_state
 
 
-
 #adds distance to a given SQLAlchemy table from a starting location (String)
-def add_distance(hospital_table, location):
-    return null;
+#queried hospitals has been filtered for the same drg and same state
+#add_distance creates new table that adds distance from specified location
+def add_distance(queried_hospitals, location):
+    from models import create_distance_table
+    session = create_distance_table()
+    #importing the new class after the session table has been created
+    from models import HospitalsDistance
+    #state_list is a query object
+    i = 0
+    for hospital in queried_hospitals:
+        distance = get_distance(location, hospital.address)
+        print(distance)
+        hospital_w_distance = HospitalsDistance(i, hospital.name, hospital.address, hospital.avg_covered, distance)
+        session.add(hospital_w_distance)
+        i += 1
 
 # at the bottom to run the app
 if __name__ == '__main__':
-    # from sqlalchemy.orm import scoped_session, sessionmaker, Query
-    # db_session = scoped_session(sessionmaker(bind=engine))
-    # for item in db_session(Hospitals.zipcode, Hospitals.city):
-    #     print (item)
+    # session = scoped_session(sessionmaker(bind=engine))
     app.run()
