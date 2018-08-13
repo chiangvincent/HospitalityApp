@@ -28,8 +28,8 @@ def send():
         geocode = get_geocode(address)
         state = get_state(geocode)
         state_list = find_closest(state, procedure)
-        state_list = state_list.query.add_columns(get_distance(address, state_list.address).label("distance")).all()
-        return procedure
+        state_list_with_dist = state_list.add_columns(get_distance(address, state_list.address).label("distance")).all()
+        return "Hi"
 
 #HELPER FUUNCTIONS AND DATA STRUCUTRES
 procedures = {
@@ -95,9 +95,9 @@ procedures = {
 def find_closest(state, drg):
     from models import Hospitals
     drg = procedures[drg]
-    in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).all()
-    in_state
+    in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).subquery()
     return in_state
+
 
 
 #adds distance to a given SQLAlchemy table from a starting location (String)
