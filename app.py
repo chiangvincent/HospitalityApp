@@ -29,7 +29,7 @@ def send():
         state = get_state(geocode)
         state_list = find_closest(state, procedure)
         state_list = state_list.query.add_columns(get_distance(address, state_list.address).label("distance")).all()
-        return procedure;
+        return procedure
 
 #HELPER FUUNCTIONS AND DATA STRUCUTRES
 procedures = {
@@ -86,10 +86,17 @@ procedures = {
 #state is string of the state of entered address
 #drg is the non-converted code
 #test using drg = "Extracranial Procedure"
+# def find_closest(state, drg):
+#     from models import Hospitals
+#     drg = procedures[drg]
+#     in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).all()
+#     return in_state
+
 def find_closest(state, drg):
     from models import Hospitals
     drg = procedures[drg]
     in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).all()
+    in_state
     return in_state
 
 
