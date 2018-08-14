@@ -32,20 +32,21 @@ def create_distance_table():
     metadata = MetaData(bind=engine)
     dist_table = Table('HospitalsDistance', metadata,
         Column('id', Integer, primary_key=True),
-        Column('name', VARCHAR(1000)),
-        Column('address', VARCHAR(1000)),
+        Column('name', String),
+        Column('address', String),
         Column('avg_covered', DECIMAL(8,2)),
-        Column('distance', DECIMAL(10, 2)))
+        Column('distance', DECIMAL(10, 2))
+        )
 
     metadata.create_all()
     clear_mappers()
     mapper(HospitalsDistance, dist_table)
     session = create_session(bind = engine, autocommit=False, autoflush=True)
-    return session 
+    return session
 
 #this is the filtered hospitals class (should never be modified)
 class Hospitals(db.Model):
-    __table__ = db.Model.metadata.tables['patientdatafiltered']
+    __table__ = db.Model.metadata.tables['patientdatafilteredtwo']
     def __repr__(self):
         return self.name
 
@@ -58,7 +59,7 @@ class Hospitals(db.Model):
 #              Column('drg', String(100)),
 #              Column('distance', Integer))
 
-
-inspector = inspect(engine)
-for _t in inspector.get_table_names():
-    print(_t)
+#printing the models
+# inspector = inspect(engine)
+# for _t in inspector.get_table_names():
+#     print(_t)

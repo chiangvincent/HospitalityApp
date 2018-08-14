@@ -112,11 +112,13 @@ def add_distance(queried_hospitals, location):
     #state_list is a query object
     i = 0
     for hospital in queried_hospitals:
-        distance = get_distance(location, hospital.address)
-        print(distance)
-        hospital_w_distance = HospitalsDistance(i, hospital.name, hospital.address, hospital.avg_covered, distance)
-        session.add(hospital_w_distance)
-        i += 1
+        if hospital is not None:
+            address = hospital.address + " " + hospital.city + " " + hospital.state
+            print(address)
+            distance = get_distance(location, address)
+            hospital_w_distance = HospitalsDistance(i, hospital.name, address, hospital.avg_covered, distance)
+            session.add(hospital_w_distance)
+            i += 1
 
 # at the bottom to run the app
 if __name__ == '__main__':

@@ -18,7 +18,10 @@ def get_state(geocode_result):
 #takes in two address strings, returns distance in meters
 def get_distance(hospital_one, hospital_two):
     dist_matrix = gmaps.distance_matrix(hospital_one, hospital_two)
-    return dist_matrix["rows"][0]["elements"][0]["distance"]['value']
+    if dist_matrix["status"] == "OK":
+        return dist_matrix["rows"][0]["elements"][0]["distance"]['value']
+    else:
+        return -10 ** 10
 
 # testing
 # print(get_distance("368 Broadway, New York, NY 10013", "30 Rockefeller Plaza"))

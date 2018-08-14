@@ -20,7 +20,7 @@ ENCLOSED BY '"'
 LINES TERMINATED BY '\n'
 IGNORE 1 ROWS;
 
-ALTER TABLE patientdatafiltered
+ALTER TABLE patientdatafilteredtwo
 MODIFY COLUMN avg_covered decimal(8, 2);
 
 ALTER TABLE patientdatafiltered
@@ -30,4 +30,13 @@ INSERT INTO patientdatafiltered (drg)
 VALUES drg varchar(100) after new;
 
 
-ALTER TABLE patientdatafiltered drop drg, drop provider_id, drop city, drop zipcode, drop ref, drop num_discharge, drop avg_pay, drop avg_medicare;
+ALTER TABLE patientdatafilteredtwo drop provider_id, drop zipcode, drop ref, drop num_discharge, drop avg_pay, drop avg_medicare;
+
+ALTER TABLE patientdatafiltered
+ADD COLUMN city varchar(100) after new;
+
+INSERT INTO patientdatafiltered (city)
+SELECT b.city from patientdata as b, patientdatafiltered as a;
+
+CREATE TABLE PATIENTDATAFILTEREDTWO AS
+SELECT * FROM PATIENTDATA;
