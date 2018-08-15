@@ -30,7 +30,8 @@ def send():
         state = get_state(geocode)
         #state_list is a queried object of SQLAlchemy
         state_list = find_closest(state, procedure)
-        add_distance(state_list, address)
+        session = add_distance(state_list, address)
+        find_closest_local(session, state_list)
         return "Hi"
 
 #HELPER FUUNCTIONS AND DATA STRUCUTRES
@@ -98,8 +99,15 @@ def find_closest(state, drg):
     from models import Hospitals
     drg = procedures[drg]
     in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).all()
+    for hospital in in_state:
+        print(hospital)
     return in_state
 
+def find_closest_local(session, query_object):
+    from models import HospitalsDistance
+    sub_q = session.query(HospitalsDistance).order_by(HospitalsDistance.distance).limit(10).subquery()
+    a = session.query(HospitalsDistance, sub_q).order_by('anon_1.avg_covered DESC').limit(3).all()
+    return a
 
 #adds distance to a given SQLAlchemy table from a starting location (String)
 #queried hospitals has been filtered for the same drg and same state
@@ -119,6 +127,7 @@ def add_distance(queried_hospitals, location):
             hospital_w_distance = HospitalsDistance(i, hospital.name, address, hospital.avg_covered, distance)
             session.add(hospital_w_distance)
             i += 1
+    return session
 
 # at the bottom to run the app
 if __name__ == '__main__':
