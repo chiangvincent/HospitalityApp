@@ -15,6 +15,10 @@ db = SQLAlchemy(app)
 app.debug = True
 db.init_app(app)
 
+#for access to hospital objects via different routing methods
+hospitals_dictionary = {}
+lat_lon_dictionary = {}
+
 @app.route('/')
 def home():
     from models import Hospitals
@@ -32,7 +36,19 @@ def send():
         session = add_distance(state_list, address)
         top_three_hospitals = find_closest_local(session)
         lat_lon_list = find_lat_lon(top_three_hospitals)
-        return render_template('maps.html', hospitals = top_three_hospitals, locations = lat_lon_list)
+        global hospitals_dictionary
+        hospitals_dictionary = {hospital.name: hospital for hospital in top_three_hospitals}
+        print(lat_lon_list)
+        return render_template('hospitals.html', hospitals = top_three_hospitals, locations = lat_lon_list, drg = procedure)
+
+@app.route('/<hospital_name>')
+def show_map(hospital_name):
+    print(hospitals_dictionary)
+    hospital_object = hospitals_dictionary[hospital_name]
+    if hospital_object:
+        return render_template('map.html', hospital = hospital_object)
+    else:
+        abort(404)
 
 #HELPER FUNCTIONS AND DATA STRUCUTRES
 procedures = {
