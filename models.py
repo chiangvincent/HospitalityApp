@@ -28,14 +28,14 @@ class HospitalsDistance(object):
 
 #takes in the query object (that has been filtered for state and drg), and the address as a string (to use in gmaps API for distance calc)
 def create_distance_table():
-    columns = ["id", "name", "address", "avg_covered", "distance"]
+    columns = ["id", "name", "address", "avg_covered", "distance", "lat", "lon"]
     metadata = MetaData(bind=engine)
     dist_table = Table('HospitalsDistance', metadata,
         Column('id', Integer, primary_key=True),
         Column('name', String),
         Column('address', String),
         Column('avg_covered', DECIMAL(8,2)),
-        Column('distance', DECIMAL(10, 2))
+        Column('distance', DECIMAL(10, 2)),
         )
 
     metadata.create_all()
@@ -49,6 +49,13 @@ class Hospitals(db.Model):
     __table__ = db.Model.metadata.tables['patientdatafilteredtwo']
     def __repr__(self):
         return self.name
+
+#location class for easy lat and lon indexing
+class Location(object):
+    def __init__(self, lat, lon):
+        self.lat = lat
+        self.lon = lon
+
 
 # create_table('filtered_hospitals',
 #              Column('name', String(25)),

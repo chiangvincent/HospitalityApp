@@ -4,8 +4,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_mysqldb import MySQL
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import scoped_session, sessionmaker, Query
-from gmaps import get_state, get_geocode, get_distance
-
+from gmaps import get_state, get_geocode, get_distance, get_lat, get_lon
 
 # engine = create_engine('sqlite:///webmgmt.db', convert_unicode=True, echo=False)
 #163065 = num rows of table
@@ -31,10 +30,11 @@ def send():
         #state_list is a queried object of SQLAlchemy
         state_list = find_closest(state, procedure)
         session = add_distance(state_list, address)
-        find_closest_local(session, state_list)
-        return "Hi"
+        top_three_hospitals = find_closest_local(session)
+        lat_lon_list = find_lat_lon(top_three_hospitals)
+        return render_template('maps.html', hospitals = top_three_hospitals, locations = lat_lon_list)
 
-#HELPER FUUNCTIONS AND DATA STRUCUTRES
+#HELPER FUNCTIONS AND DATA STRUCUTRES
 procedures = {
         "Extracranial Procedure" : "039 - EXTRACRANIAL PROCEDURES W/O CC/MCC",
         "Intracranial Hemorrhage or Cerebral Infarction" : "066 - INTRACRANIAL HEMORRHAGE OR CEREBRAL INFARCTION W/O CC/MCC",
@@ -99,14 +99,13 @@ def find_closest(state, drg):
     from models import Hospitals
     drg = procedures[drg]
     in_state =  Hospitals.query.filter_by(drg = drg).filter_by(state = state).all()
-    for hospital in in_state:
-        print(hospital)
     return in_state
 
-def find_closest_local(session, query_object):
+#returns a list of the top three hospitals based on the drg
+def find_closest_local(session):
     from models import HospitalsDistance
     sub_q = session.query(HospitalsDistance).order_by(HospitalsDistance.distance).limit(10).subquery()
-    a = session.query(HospitalsDistance, sub_q).order_by('anon_1.avg_covered DESC').limit(3).all()
+    a = session.query(HospitalsDistance, sub_q).order_by('HospitalsDistance_avg_covered DESC').limit(3).all()
     return a
 
 #adds distance to a given SQLAlchemy table from a starting location (String)
@@ -114,20 +113,33 @@ def find_closest_local(session, query_object):
 #add_distance creates new table that adds distance from specified location
 def add_distance(queried_hospitals, location):
     from models import create_distance_table
-    session = create_distance_table()
+    sess = create_distance_table()
     #importing the new class after the session table has been created
     from models import HospitalsDistance
     #state_list is a query object
     i = 0
+    sess.query(HospitalsDistance).delete()
     for hospital in queried_hospitals:
-        if hospital is not None:
-            address = hospital.address + " " + hospital.city + " " + hospital.state
-            print(address)
-            distance = get_distance(location, address)
-            hospital_w_distance = HospitalsDistance(i, hospital.name, address, hospital.avg_covered, distance)
-            session.add(hospital_w_distance)
-            i += 1
-    return session
+        address = hospital.address + " " + hospital.city + " " + hospital.state
+        distance = get_distance(location, address)
+        hospital_w_distance = HospitalsDistance(i, hospital.name, address, hospital.avg_covered, distance)
+        sess.add(hospital_w_distance)
+        i += 1
+    return sess
+
+#takes a query object containing list of top three hospitals
+def find_lat_lon(hospital_list):
+    from models import Location
+    list = []
+    for hospital in hospital_list:
+        address = hospital.address
+        print(address)
+        lat = get_lat(address)
+        lon = get_lon(address)
+        hospital_location = Location(lat, lon)
+        list += [hospital_location]
+    print(list)
+    return list
 
 # at the bottom to run the app
 if __name__ == '__main__':

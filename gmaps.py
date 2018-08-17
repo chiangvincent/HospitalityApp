@@ -23,6 +23,16 @@ def get_distance(hospital_one, hospital_two):
     else:
         return -10 ** 10
 
+#gets latitude of specific address via geocoding API
+def get_lat(address):
+    results = gmaps.geocode(address)
+    return results[0]["geometry"]["location"]["lat"]
+
+#gets latitude of specific address via geocoding API
+def get_lon(address):
+    results = gmaps.geocode(address)
+    return results[0]["geometry"]["location"]["lng"]
+
 # testing
 # print(get_distance("368 Broadway, New York, NY 10013", "30 Rockefeller Plaza"))
 # print(get_state(geocode_result))
