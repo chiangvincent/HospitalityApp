@@ -8,10 +8,10 @@
   <body>
     <div class="container">
       <div class="jumbotron text-center">
-        <h3>For the procedure "{{drg}}", here are the top hospitals:</h3>
-          <p>Learn more about each hospital by clicking below</p>
+        <p class="lead">Top hospitals near <strong>"{{address}}"</strong>that have best coverage for <strong>"{{drg}}"</strong>:</p>
+          <p class="text-info">Learn more about each hospital by clicking below:</p>
          {% for hospital in hospitals %}
-          <p><a class="btn btn-primary btn-lg" href="{{hospital.name}}">{{hospital.name}}</a></p>
+          <h5 class="display-4" ><a class="btn btn-primary btn-lg" href="{{hospital.name}}">{{hospital.name}}</a></h5>
          {% endfor %}
       </div>
    </div>

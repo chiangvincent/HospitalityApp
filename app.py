@@ -15,7 +15,8 @@ db = SQLAlchemy(app)
 app.debug = True
 db.init_app(app)
 
-#for access to hospital objects via different routing methods
+#for access to hospital objects via different routing methods global variables modified in different functions
+address = ""
 hospitals_dictionary = {}
 lat_lon_dictionary = {}
 
@@ -28,25 +29,33 @@ def home():
 def send():
     if request.method == 'POST':
         procedure = request.form['myInput']
-        address = request.form['address']
-        geocode = get_geocode(address)
+        local_address = request.form['address']
+        global address
+        address = local_address
+        geocode = get_geocode(local_address)
         state = get_state(geocode)
         #state_list is a queried object of SQLAlchemy
         state_list = find_closest(state, procedure)
-        session = add_distance(state_list, address)
+        session = add_distance(state_list, local_address)
         top_three_hospitals = find_closest_local(session)
-        lat_lon_list = find_lat_lon(top_three_hospitals)
+        lat_lon_list = create_lat_lon(top_three_hospitals)
         global hospitals_dictionary
+
+        #creating hospital reference for different routing functions
         hospitals_dictionary = {hospital.name: hospital for hospital in top_three_hospitals}
-        print(lat_lon_list)
-        return render_template('hospitals.html', hospitals = top_three_hospitals, locations = lat_lon_list, drg = procedure)
+
+        #populating the lat_lon dictionary for individual hospital mapping
+        create_lat_lon(top_three_hospitals)
+
+        return render_template('hospitals.html', hospitals = top_three_hospitals, locations = lat_lon_list, drg = procedure, address = address)
 
 @app.route('/<hospital_name>')
 def show_map(hospital_name):
     print(hospitals_dictionary)
     hospital_object = hospitals_dictionary[hospital_name]
+    hospital_lat_lon = lat_lon_dictionary[hospital_name]
     if hospital_object:
-        return render_template('map.html', hospital = hospital_object)
+        return render_template('map.html', hospital = hospital_object, location = hospital_lat_lon, address = address)
     else:
         abort(404)
 
@@ -137,25 +146,23 @@ def add_distance(queried_hospitals, location):
     sess.query(HospitalsDistance).delete()
     for hospital in queried_hospitals:
         address = hospital.address + " " + hospital.city + " " + hospital.state
-        distance = get_distance(location, address)
+        distance = get_distance(location, address) / 1000
         hospital_w_distance = HospitalsDistance(i, hospital.name, address, hospital.avg_covered, distance)
         sess.add(hospital_w_distance)
         i += 1
     return sess
 
-#takes a query object containing list of top three hospitals
-def find_lat_lon(hospital_list):
+#takes in three hospitals and creates a dictionary of lat lon coordinates
+def create_lat_lon(hospitals):
     from models import Location
-    list = []
-    for hospital in hospital_list:
+    for hospital in hospitals:
         address = hospital.address
-        print(address)
         lat = get_lat(address)
         lon = get_lon(address)
-        hospital_location = Location(lat, lon)
-        list += [hospital_location]
-    print(list)
-    return list
+        location_object = Location(lat, lon)
+        global lat_lon_dictionary
+        lat_lon_dictionary[hospital.name] = location_object
+    return
 
 # at the bottom to run the app
 if __name__ == '__main__':

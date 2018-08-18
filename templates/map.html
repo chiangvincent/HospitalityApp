@@ -9,17 +9,20 @@
     <script type="text/javascript">
     function initMap() {
       map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -34.397, lng: 150.644},
-        zoom: 8
+        center: {lat: {{location.lat}}, lng: {{location.lon}}},
+        zoom: 15
       });
     }
     </script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAZ0UcwsMV6FchqQhNp--D9ZXEc6onzPNI&callback=initMap"
     async defer></script>
     <div class="container">
-    <h1>These are your top three Hospitals:</h1>
-        <h1> {{hospital.name}} </h1>
-        <div id="map" style="width:500px; height:500px;"></div>
+      <h1 class="display-4"> {{hospital.name}} </h1>
+      <ul class="list-group">
+        <li class="list-group-item">Distance from "{{address}}" : <mark>{{hospital.distance}} km. </mark></li>
+        <li class="list-group-item">Average Medicare Coverage for your chosen procedure: <mark>${{hospital.avg_covered}}</mark></li>
+      </ul>
+      <div id="map" style="width:500px; height:500px;"></div>
     </div>
   </body>
 </html>
