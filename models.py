@@ -56,7 +56,6 @@ class Location(object):
         self.lat = lat
         self.lon = lon
 
-
 # create_table('filtered_hospitals',
 #              Column('name', String(25)),
 #              Column('address', String(100)),
